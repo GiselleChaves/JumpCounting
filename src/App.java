@@ -14,8 +14,12 @@ public class App {
         // The input path is the first argument
         String path = args[0];  
 
-        BigInteger result = JumpCounting.recursiveJumps(path, 0, false); 
+        BigInteger resultRecursiveJumps = JumpCounting.recursiveJumps(path, 0, false); 
+        BigInteger resultRecursiveMemorizationJumps = JumpCounting.calculateWays(path); 
+        BigInteger resultIterativeJumps = JumpCounting.iterativeJumps(path); 
 
-        System.out.println("Quantidade de maneiras de cruzar o rio: " + result);
+        System.out.println("Recursão simples: " + resultRecursiveJumps);
+        System.out.println("Recursão memorizada: " + resultRecursiveMemorizationJumps);
+        System.out.println("Sem recursão: " + resultIterativeJumps);
     }
 }
