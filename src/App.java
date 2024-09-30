@@ -1,3 +1,11 @@
+/*
+Disciplina: Projeto e Otimização de Algoritmos
+Professor: João Batista de Oliveira
+T2: Programação Dinâmica
+Autora: Giselle Gonçalves Chaves
+Entrega: 29/09/2024
+*/
+
 import java.math.BigInteger;
 
 public class App {
@@ -16,10 +24,10 @@ public class App {
 
         BigInteger resultRecursiveJumps = JumpCounting.recursiveJumps(path, 0, false); 
         BigInteger resultRecursiveMemorizationJumps = JumpCounting.calculateWays(path); 
-        BigInteger resultIterativeJumps = JumpCounting.iterativeJumps(path); 
+        BigInteger resultadoIterativo = JumpCounting.iterativeJumps(path); 
 
         System.out.println("Recursão simples: " + resultRecursiveJumps);
         System.out.println("Recursão memorizada: " + resultRecursiveMemorizationJumps);
-        System.out.println("Sem recursão: " + resultIterativeJumps);
+        System.out.println("Sem recursão: " + resultadoIterativo);
     }
 }

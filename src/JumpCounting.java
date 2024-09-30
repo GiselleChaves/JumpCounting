@@ -3,7 +3,7 @@ import java.util.Arrays;
 
 public class JumpCounting {
 
-  //Solução de contador recursivo
+  //Recursive Counter Solution
   public static BigInteger recursiveJumps(String path, int pos, boolean lastJumpWas3) {
     int pathLength = path.length();
 
@@ -20,6 +20,7 @@ public class JumpCounting {
       return BigInteger.ZERO;
     }
 
+    // If the chacracter in the position is equal 0 return 0 
     if (path.charAt(pos) == '0') {
       return BigInteger.ZERO;
     }
@@ -38,7 +39,7 @@ public class JumpCounting {
     return ways;
   }
 
-  // Método único que combina a lógica de inicialização e a recursão com memorização
+  // Unique method that combines initialization logic and recursion with memorization
   public static BigInteger calculateWays(String path) {
     int pathLength = path.length();
     BigInteger[][] memo = new BigInteger[pathLength][2]; // Matriz para memorização [posição][lastJumpWas3]
@@ -47,11 +48,11 @@ public class JumpCounting {
     }
 
     return recursiveJumpsWithMemorization(path, 0, false, memo, pathLength); // Chama a função recursiva com memorização
-}
+  }
 
 
-// Solução Recursiva + Memorização
-private static BigInteger recursiveJumpsWithMemorization(String path, int pos, boolean lastJumpWas3, BigInteger[][] memo, int pathLength) {
+  // Recursive + Memorization solution
+  private static BigInteger recursiveJumpsWithMemorization(String path, int pos, boolean lastJumpWas3, BigInteger[][] memo, int pathLength) {
 
     // Contar o número de maneiras de cruzar a partir dessa posição
     BigInteger ways = BigInteger.ZERO;
@@ -90,70 +91,40 @@ private static BigInteger recursiveJumpsWithMemorization(String path, int pos, b
     return ways;
   }
 
-  //SOLUÇÃO ITERATIVA
+  // Função Iterativa
   public static BigInteger iterativeJumps(String path) {
+    int pathLength = path.length(); 
 
-    int pathLength = path.length();
+    //Variables for value swaps
+    BigInteger value1 = BigInteger.ONE, value2 = BigInteger.ZERO, value3 = BigInteger.ZERO, 
+    value4 = BigInteger.ZERO, value5 = BigInteger.ZERO, result = BigInteger.ZERO;
 
-    if (pathLength == 0) {
-      return BigInteger.ZERO; // Retorna 0 se não houver caminho
-    }
-
-    if (path.charAt(0) == '0') {
-        return BigInteger.ZERO; // Não há maneira de começar se o primeiro é um buraco
-    }
-
-    if (pathLength == 1) { 
-      return BigInteger.ONE; // Reached the final margin
-    }
-    
-    BigInteger[] ways = new BigInteger[pathLength]; // Array para armazenar o número de maneiras
-    Arrays.fill(ways, BigInteger.ZERO); // Inicializa todos os elementos com 0
-
-    // A primeira posição (margem inicial) é uma maneira válida
-    ways[0] = BigInteger.ONE; // Há uma maneira de estar na margem inicial
-
-
-    for (int pos = 0; pos < pathLength; pos++) {
-    // Se estamos em uma posição que não é um buraco
-      if (path.charAt(pos) != '0') {
-        // Pular 1 metro à frente
-        if (pos + 1 < pathLength && path.charAt(pos + 1) != '0') {
-          System.out.println("Trying to jump 1 meter from position: " + pos);
-            System.out.println("Position + 1: " + (pos + 1) + ", Value: " + path.charAt(pos + 1));
-            System.out.println("Jumping 1 meter is valid from position: " + pos);
-            System.out.println(ways[pos]);
-            ways[pos + 1] = ways[pos + 1].add(ways[pos]);
+    // Loop to process the jump path
+    for (int i = 0; i < pathLength - 1; i++) {
+      if (path.charAt(i + 1) == '1' || path.charAt(i + 1) == 'm') { // If the next position is a rock
+        if (i < 5 || value3.equals(BigInteger.ZERO)) {
+          result = value3.add(value2).add(value1); // Case where n3 has not been updated yet
         } else {
-            System.out.println("Jumping 1 meter is NOT valid from position: " + pos);
+          result = value5.add(value4).add(value2).add(value1); // Case where a jump of 3 meters has already been made
         }
-        // Pular 2 metros à frente
-        if (pos + 2 < pathLength && path.charAt(pos + 2) != '0') {
-          System.out.println("Trying to jump 2 meters from position: " + pos);
-            System.out.println("Position + 2: " + (pos + 2) + ", Value: " + path.charAt(pos + 2));
-            System.out.println("Jumping 2 meters is valid from position: " + pos);
-            System.out.println(ways[pos]);
-            ways[pos + 2] = ways[pos + 2].add(ways[pos]);
-        } else {
-            System.out.println("Jumping 2 meters is NOT valid from position: " + pos);
-        }
-        // Pular 3 metros à frente, somente se o último pulo não foi de 3 metros
-        if (pos + 3 < pathLength && path.charAt(pos + 3) != '0') {
-          if (pos < 2 || (path.charAt(pos - 1) != '0' && path.charAt(pos - 2) != '0')) {
-            System.out.println("Trying to jump 3 meters from position: " + pos);
-            System.out.println("Position + 3: " + (pos + 3) + ", Value: " + path.charAt(pos + 3));
-            System.out.println("Jumping 3 meters is valid from position: " + pos);
-            System.out.println(ways[pos]);
-            ways[pos + 3] = ways[pos + 3].add(ways[pos]);
-        } else {
-            System.out.println("Jumping 3 meters is NOT valid from position: " + pos);
-        }
+
+        // Updating variable values
+        value5 = value4;
+        value4 = value3;
+        value3 = value2;
+        value2 = value1;
+        value1 = result;
+
+          
+      } else if (path.charAt(i + 1) == '0') { // If the next position is a hole
+
+        value5 = value4;
+        value4 = value3;
+        value3 = value2;
+        value2 = value1;
+        value1 = BigInteger.ZERO;
       }
     }
-  }
-    
-    // O resultado é o número de maneiras de chegar à última posição (margem final)
-    return ways[pathLength - 1];
+    return value1;
   }
 }
-
